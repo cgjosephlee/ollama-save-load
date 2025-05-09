@@ -20,6 +20,7 @@ class ModelName:
 def parse_model_name(name: str) -> ModelName:
     # Define regex patterns for different scenarios
     patterns = [
+        r"^(?P<host>[^/]+)/(?P<namespace>[^/]+)/(?P<model>[^:]+):(?P<tag>.+)$",  # { host } "/" { namespace } "/" { model } ":" { tag }
         r"^(?P<namespace>[^/]+)/(?P<model>[^:]+):(?P<tag>.+)$",  # { namespace } "/" { model } ":" { tag }
         r"^(?P<namespace>[^/]+)/(?P<model>[^:]+)$",  # { namespace } "/" { model }
         r"^(?P<model>[^:]+):(?P<tag>.+)$",  # { model } ":" { tag }
@@ -31,6 +32,7 @@ def parse_model_name(name: str) -> ModelName:
         if match:
             groups = match.groupdict()
             return ModelName(
+                host=groups.get("host", "registry.ollama.ai"),
                 namespace=groups.get("namespace", "library"),
                 model=groups["model"],
                 tag=groups.get("tag", "latest"),
